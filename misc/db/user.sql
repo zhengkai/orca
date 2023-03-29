@@ -1,0 +1,6 @@
+CREATE USER 'orca'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'orca';
+GRANT USAGE ON *.* TO 'orca'@'localhost';
+ALTER USER 'orca'@'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
+
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, LOCK TABLES ON `orca`.* TO 'orca'@'localhost';
+ALTER USER 'orca'@'localhost' ;

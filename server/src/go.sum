@@ -1,0 +1,6 @@
+github.com/prometheus/client_golang v1.14.0 h1:nJdhIvne2eSX/XRAFV9PcvFFRbrjbcTUj0VP62TMhnw=
+github.com/prometheus/client_golang v1.14.0/go.mod h1:8vpkKitgIVNcqrRBWh1C4TIUQgYNtG/XQE4E/Zae36Y=
+github.com/zhengkai/life-go v1.0.3 h1:rzm+Hb8H4He5trWx3lthFEQPf3sHpns0bDZ7vubT6sI=
+github.com/zhengkai/life-go v1.0.3/go.mod h1:e2RGLfk+uRzjhRrMQash9X4iY3jAuGj99r0qj5JS7m4=
+github.com/zhengkai/zog v1.0.3 h1:dkJdXJKRjbqqlseFycA1d80AUU6HAZrPe4WplpmwTo4=
+github.com/zhengkai/zog v1.0.3/go.mod h1:dXbJ0XDMRXQX+XeNuIM9hJy/6OLRNtXHPq/86ll8u6I=
