@@ -10,8 +10,8 @@ func init() {
 	Dir, _ = filepath.Abs(filepath.Dir(os.Args[0]))
 
 	list := map[string]*string{
-		`ORCA_MYSQL`: &MySQL,
-		`STATIC_DIR`:    &StaticDir,
+		`STATIC_DIR`: &StaticDir,
+		`WEB_ADDR`:   &WebAddr,
 	}
 	for k, v := range list {
 		s := os.Getenv(k)

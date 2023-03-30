@@ -1,33 +1,29 @@
 package web
 
 import (
-	"fmt"
 	"net/http"
+	"project/config"
+	"project/core"
 	"project/zj"
 	"time"
 )
 
 // Server ...
-func Server(port int) {
-
-	addr := fmt.Sprintf(`localhost:%d`, port)
+func Server() {
 
 	mux := http.NewServeMux()
-	mux.HandleFunc(`/`, failbackHandle)
+
+	mux.HandleFunc(`/`, core.NewCore().WebHandle)
 
 	s := &http.Server{
-		Addr:         addr,
+		Addr:         config.WebAddr,
 		Handler:      mux,
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 30 * time.Second,
 		IdleTimeout:  30 * time.Second,
 	}
 
-	zj.J(`start web server`, addr)
+	zj.J(`start web server`, config.WebAddr)
 
 	s.ListenAndServe()
-}
-
-func failbackHandle(w http.ResponseWriter, r *http.Request) {
-	zj.J(`failback handle`, r.URL.String())
 }

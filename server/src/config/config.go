@@ -5,6 +5,7 @@ var (
 	Prod bool
 	Dir  string
 
-	MySQL     = `user:pass@/dbname`
-	StaticDir = `/tmp`
+	StaticDir = `/www/orca/static`
+
+	WebAddr = `localhost:22035`
 )
