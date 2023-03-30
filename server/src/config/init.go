@@ -10,8 +10,9 @@ func init() {
 	Dir, _ = filepath.Abs(filepath.Dir(os.Args[0]))
 
 	list := map[string]*string{
-		`STATIC_DIR`: &StaticDir,
-		`WEB_ADDR`:   &WebAddr,
+		`OPENAI_API_KEY`: &OpenAIKey,
+		`STATIC_DIR`:     &StaticDir,
+		`WEB_ADDR`:       &WebAddr,
 	}
 	for k, v := range list {
 		s := os.Getenv(k)

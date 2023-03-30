@@ -1,21 +1,21 @@
 package core
 
 import (
-	"crypto/md5"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"project/pb"
 	"project/util"
-
-	"google.golang.org/protobuf/proto"
+	"project/zj"
 )
 
-func req(w http.ResponseWriter, r *http.Request) (p *pb.Req, hash [16]byte, err error) {
+func req(w http.ResponseWriter, r *http.Request) (p *pb.Req, err error) {
 
 	path := r.URL.Path
 	method := r.Method
 
-	ab, err := ioutil.ReadAll(http.MaxBytesReader(w, r.Body, 1024*1024))
+	zj.J(method, path)
+
+	ab, err := io.ReadAll(http.MaxBytesReader(w, r.Body, 1024*1024))
 	if err != nil {
 		return
 	}
@@ -27,14 +27,7 @@ func req(w http.ResponseWriter, r *http.Request) (p *pb.Req, hash [16]byte, err 
 		Method: method,
 		Body:   ab,
 	}
-
-	pab, err := proto.Marshal(p)
-	if err != nil {
-		err500(w)
-		return
-	}
-
-	hash = md5.Sum(pab)
+	zj.F(`%x %s %s`, p.Hash(), method, path)
 	return
 }
 

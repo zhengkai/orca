@@ -1,12 +1,16 @@
 package core
 
 import (
+	"net/http"
 	"project/pb"
 	"project/zj"
 	"time"
 )
 
-func (c *Core) add(hash [16]byte, req *pb.Req) (pr *row) {
+func (c *Core) add(req *pb.Req, hr *http.Request) (pr *row) {
+
+	hash := req.Hash()
+
 	c.mux.Lock()
 	pr, ok := c.pool[hash]
 	if ok {
@@ -16,6 +20,7 @@ func (c *Core) add(hash [16]byte, req *pb.Req) (pr *row) {
 	}
 
 	pr = &row{
+		hr:   hr,
 		hash: hash,
 		req:  req,
 		t:    time.Now(),

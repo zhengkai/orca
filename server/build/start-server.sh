@@ -2,6 +2,9 @@
 
 DIR=$(readlink -f "$0") && DIR=$(dirname "$DIR") && cd "$DIR" || exit 1
 
+if [ -e ./env.sh ]; then
+	. ./env.sh
+fi
 . ./common.sh
 LOG="log file: $LOG_FILE"
 

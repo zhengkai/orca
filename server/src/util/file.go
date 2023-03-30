@@ -4,15 +4,30 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"project/config"
 	"project/zj"
 	"strings"
 
+	"github.com/zhengkai/zu"
 	"google.golang.org/protobuf/proto"
 )
 
 // DownloadFunc ...
 type DownloadFunc func(url string) (ab []byte, err error)
+
+// CacheName ...
+func CacheName(hash [16]byte) string {
+	s := fmt.Sprintf(`cache/%x/%x/%x`, hash[0:2], hash[2:4], hash[4:])
+	os.MkdirAll(StaticFile(filepath.Dir(s)), 0755)
+	return s
+}
+
+// FileExists ...
+func FileExists(filename string) bool {
+	filename = fmt.Sprintf(`%s/%s`, config.StaticDir, filename)
+	return zu.FileExists(filename)
+}
 
 // IsURL ...
 func IsURL(s string) bool {

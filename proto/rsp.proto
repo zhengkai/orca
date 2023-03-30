@@ -1,0 +1,16 @@
+syntax = "proto3";
+option go_package = "/pb";
+package pb;
+
+message Rsp {
+	uint32 id = 1;
+	string object = 2;
+	fixed32 created = 3;
+	string model = 4;
+	RspUsage usage = 5;
+}
+
+message RspUsage {
+	uint32 prompt_tokens = 1;
+	uint32 total_tokens = 2;
+}
