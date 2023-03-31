@@ -29,6 +29,7 @@ func (pr *row) run() {
 	zj.J(`new`, s)
 
 	pr.rsp, pr.err = fetchRemote(pr.req)
+
 	go pr.saveFile()
 	go pr.metrics()
 
@@ -44,11 +45,8 @@ func (pr *row) wait() {
 }
 
 func (pr *row) saveFile() {
-	rspFile := util.CacheName(pr.req.Hash()) + `-rsp.json`
-	if !util.FileExists(rspFile) {
-		util.WriteFile(rspFile, pr.rsp)
-		zj.J(rspFile)
-	}
+	rspFile := rspCacheFile(pr.req)
+	util.WriteFile(rspFile, pr.rsp)
 }
 
 func (pr *row) metrics() {

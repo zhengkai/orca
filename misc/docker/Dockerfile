@@ -5,7 +5,7 @@ FROM golang:latest as builder
 ARG DOCKER_RUNNING=yes
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -yq protobuf-compiler tzdata ca-certificates
-RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.27.1
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.30.0
 
 COPY . /project
 
@@ -23,6 +23,10 @@ COPY --from=builder /project/server/dist/prod/orca-server-next /orca-server
 
 RUN apk add --no-cache gzip brotli
 
-ENV TZ=Asia/Shanghai
+ENV TZ="Asia/Shanghai"
+
+ENV ORCA_WEB=":80"
+ENV ORCA_LOG="/log"
+ENV STATIC_DIR="/tmp"
 
 CMD ["/orca-server"]

@@ -8,11 +8,13 @@ import (
 func init() {
 
 	Dir, _ = filepath.Abs(filepath.Dir(os.Args[0]))
+	LogDir = Dir + `/log`
 
 	list := map[string]*string{
 		`OPENAI_API_KEY`: &OpenAIKey,
 		`STATIC_DIR`:     &StaticDir,
-		`WEB_ADDR`:       &WebAddr,
+		`ORCA_WEB`:       &WebAddr,
+		`ORCA_LOG`:       &LogDir,
 	}
 	for k, v := range list {
 		s := os.Getenv(k)

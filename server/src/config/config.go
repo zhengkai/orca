@@ -2,8 +2,9 @@ package config
 
 // config
 var (
-	Prod bool
-	Dir  string
+	Prod   bool
+	Dir    string
+	LogDir string
 
 	StaticDir = `/www/orca/static`
 

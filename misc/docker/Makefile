@@ -1,19 +1,28 @@
 SHELL:=/bin/bash
 
+include ../../server/build/env.sh
+
 build: git
 	sudo docker build -t orca -f Dockerfile ../..
 
 run: build
-	sudo docker run --env "ORCA_MYSQL=orca:orca@tcp(172.17.0.1:3306)/orca" \
-		--mount type=bind,source=/tmp/orca/tmp,target=/tmp \
-		--mount type=bind,source=/tmp/orca/server/dist/prod/log,target=/log \
+	sudo docker run \
+		--env "OPENAI_API_KEY=$(OPENAI_API_KEY)" \
+		--mount type=bind,source=/www/orca/static,target=/tmp \
+		--mount type=bind,source=/www/orca/server/dist/prod/log,target=/log \
+		-p 127.0.0.1:21035:80 \
 		orca
 
 install: build
 	sudo docker save orca > docker-orca.tar
-	scp docker-orca.tar freya:/tmp
-	scp install.sh freya:/tmp
-	ssh freya "chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh"
+	scp docker-orca.tar lamia:/tmp
+	scp install.sh lamia:/tmp
+	scp ../../server/build/env.sh lamia:/tmp
+	ssh lamia "chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh"
+	ssh lamia "rm /tmp/env.sh"
+
+nginx:
+	scp ../nginx/prod.conf lamia:/etc/nginx/vhost.d/600-orca
 
 git:
 	../../server/build/git-hash.sh > ../../server/build/.git-hash

@@ -36,7 +36,11 @@ func fetchRemote(r *pb.Req) (ab []byte, err error) {
 		return
 	}
 
-	defer rsp.Body.Close()
+	for k, v := range rsp.Header {
+		zj.J(k, v)
+	}
 
-	return io.ReadAll(rsp.Body)
+	ab, err = io.ReadAll(rsp.Body)
+	rsp.Body.Close()
+	return
 }

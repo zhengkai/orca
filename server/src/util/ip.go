@@ -28,18 +28,20 @@ func GetIP(r *http.Request) (net.IP, error) {
 		return nil, errors.New(`Invalid IP address`)
 	}
 
-	// 检查是否是IPv4
-	parsedIPv4 := parsedIP.To4()
-	if parsedIPv4 == nil {
-		return nil, errors.New(`IP address not IPv4`)
-	}
+	/*
+		// 检查是否是IPv4
+		parsedIPv4 := parsedIP.To4()
+		if parsedIPv4 == nil {
+			return nil, errors.New(`IP address not IPv4`)
+		}
 
-	// 检查是否为局域网IP
-	if !parsedIP.IsPrivate() {
-		return nil, errors.New(`Public IP address not allowed`)
-	}
+		// 检查是否为局域网IP
+		if !parsedIP.IsPrivate() {
+			return nil, errors.New(`Public IP address not allowed`)
+		}
+	*/
 
-	return parsedIPv4, nil
+	return parsedIP, nil
 }
 
 // IPString ...

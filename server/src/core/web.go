@@ -1,36 +1,37 @@
 package core
 
 import (
+	"errors"
 	"net/http"
 	"project/metrics"
-	"project/util"
+	"project/zj"
 )
+
+var errSkip = errors.New(`skip`)
 
 // WebHandle ...
 func (c *Core) WebHandle(w http.ResponseWriter, r *http.Request) {
 
 	p, err := req(w, r)
 	if err != nil {
-		metrics.ReqFailCount()
-		return
-	}
-	metrics.ReqBytes(len(p.Body))
-
-	pr := c.add(p, r)
-
-	go func() {
-		reqFile := util.CacheName(p.Hash()) + `-req.json`
-		if !util.FileExists(reqFile) {
-			util.WriteFile(reqFile, p.Body)
+		if err != errSkip {
+			metrics.ReqFailCount()
 		}
-	}()
-
-	pr.wait()
-
-	if pr.err != nil {
 		err500(w)
 		return
 	}
 
-	w.Write(pr.rsp)
+	metrics.ReqBytes(len(p.Body))
+
+	ab, cached, err := c.getAB(p, r)
+	if err != nil {
+		err500(w)
+		return
+	}
+	zj.J(`cached`, cached)
+
+	w.Header().Add(`Content-Type`, `application/json`)
+	w.Write(ab)
+
+	go doMetrics(ab, cached, r)
 }

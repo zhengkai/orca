@@ -34,15 +34,13 @@ func Init() {
 
 	baseLog.SetDirPrefix(filepath.Dir(zog.GetSourceFileDir()))
 
-	// 生产环境走 docker，不写本地文件
-	if !config.Prod {
+	dir := config.LogDir
 
-		mainFile, _ := zog.NewFile(config.Dir+`/log/default.txt`, false)
-		infoFile, _ := zog.NewFile(config.Dir+`/log/io.txt`, false)
-		errFile, _ := zog.NewFile(config.Dir+`/log/err.txt`, true)
+	mainFile, _ := zog.NewFile(dir+`/default.txt`, false)
+	infoFile, _ := zog.NewFile(dir+`/io.txt`, false)
+	errFile, _ := zog.NewFile(dir+`/err.txt`, true)
 
-		mainCfg.Output = append(mainCfg.Output, mainFile)
-		infoCfg.Output = append(infoCfg.Output, infoFile)
-		errCfg.Output = append(errCfg.Output, mainFile, errFile)
-	}
+	mainCfg.Output = append(mainCfg.Output, mainFile)
+	infoCfg.Output = append(infoCfg.Output, infoFile)
+	errCfg.Output = append(errCfg.Output, mainFile, errFile)
 }
