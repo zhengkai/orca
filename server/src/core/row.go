@@ -1,6 +1,7 @@
 package core
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"project/pb"
@@ -11,14 +12,15 @@ import (
 )
 
 type row struct {
-	hash [16]byte
-	hr   *http.Request
-	req  *pb.Req
-	rsp  []byte
-	err  error
-	done bool
-	t    time.Time
-	mux  sync.RWMutex
+	hash    [16]byte
+	hr      *http.Request
+	req     *pb.Req
+	rsp     []byte
+	err     error
+	done    bool
+	t       time.Time
+	mux     sync.RWMutex
+	failLog *bytes.Buffer
 }
 
 func (pr *row) run() {
@@ -28,10 +30,16 @@ func (pr *row) run() {
 	s := fmt.Sprintf(`%x, %s`, pr.hash, pr.t.Format(`2006-01-02 15:04:05`))
 	zj.J(`new`, s)
 
-	pr.rsp, pr.err = fetchRemote(pr.req)
+	var ok bool
+	pr.rsp, ok, pr.err = pr.fetchRemote()
+	if pr.err == nil && ok {
+		pr.failLog.Reset()
+	} else {
+		go writeFailLog(pr.hash, pr.failLog.Bytes())
+	}
 
 	go pr.saveFile()
-	go pr.metrics()
+	// go pr.metrics()
 
 	pr.done = true
 	pr.mux.Unlock()
@@ -47,7 +55,4 @@ func (pr *row) wait() {
 func (pr *row) saveFile() {
 	rspFile := rspCacheFile(pr.req)
 	util.WriteFile(rspFile, pr.rsp)
-}
-
-func (pr *row) metrics() {
 }

@@ -1,6 +1,8 @@
 package config
 
 import (
+	"fmt"
+	"net/url"
 	"os"
 	"path/filepath"
 )
@@ -21,5 +23,11 @@ func init() {
 		if len(s) > 1 {
 			*v = s
 		}
+	}
+
+	_, err := url.Parse(OpenAIBase)
+	if err != nil {
+		fmt.Println(`OpenAI base URL is invalid.`)
+		panic(err)
 	}
 }

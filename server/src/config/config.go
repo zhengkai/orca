@@ -10,7 +10,7 @@ var (
 
 	WebAddr = `localhost:22035`
 
-	RemoteAPI = `https://api.openai.com`
+	OpenAIBase = `https://api.openai.com`
 
 	OpenAIKey = ``
 )
