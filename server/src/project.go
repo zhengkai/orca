@@ -3,7 +3,6 @@ package project
 import (
 	"project/build"
 	"project/config"
-	"project/tmptest"
 	"project/web"
 	"project/zj"
 
@@ -17,7 +16,7 @@ func Start() {
 
 	zj.Init()
 
-	tmptest.Test()
+	// tmptest.Test()
 
 	go web.Server()
 

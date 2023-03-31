@@ -49,7 +49,7 @@ func (pr *row) fetchRemote() (ab []byte, ok bool, err error) {
 	}
 
 	if rsp.StatusCode >= 200 || rsp.StatusCode < 300 {
-		// ok = true
+		ok = true
 	} else {
 		err = fmt.Errorf(`status code fail: %d`, rsp.StatusCode)
 		b.WriteString(err.Error())

@@ -6,6 +6,7 @@ import (
 	"project/metrics"
 	"project/pb"
 	"project/util"
+	"project/zj"
 )
 
 func doMetrics(ab []byte, cached bool, r *http.Request) {
@@ -22,6 +23,9 @@ func doMetrics(ab []byte, cached bool, r *http.Request) {
 	}
 
 	metrics.RspToken(u.PromptTokens, u.TotalTokens, cached)
+	if !cached {
+		zj.J(`token`, u.PromptTokens, u.TotalTokens)
+	}
 
 	ip, err := util.GetIP(r)
 	sip := ip.String()
