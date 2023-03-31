@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func (c *Core) add(req *pb.Req, hr *http.Request) (pr *row) {
+func (c *Core) add(req *pb.Req, hr *http.Request) (pr *row, cached bool) {
 
 	hash := req.Hash()
 
@@ -16,6 +16,7 @@ func (c *Core) add(req *pb.Req, hr *http.Request) (pr *row) {
 	if ok {
 		zj.F(`hit %x`, hash)
 		c.mux.Unlock()
+		cached = true
 		return
 	}
 

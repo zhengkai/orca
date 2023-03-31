@@ -18,7 +18,7 @@ type DownloadFunc func(url string) (ab []byte, err error)
 
 // CacheName ...
 func CacheName(hash [16]byte) string {
-	s := fmt.Sprintf(`cache/%x/%x/%x`, hash[0:2], hash[2:4], hash[4:])
+	s := fmt.Sprintf(`cache/%02x/%02x/%02x/%x`, hash[0], hash[1], hash[2], hash[3:])
 	os.MkdirAll(StaticFile(filepath.Dir(s)), 0755)
 	return s
 }

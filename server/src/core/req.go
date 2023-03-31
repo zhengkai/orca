@@ -15,7 +15,7 @@ func (c *Core) getAB(p *pb.Req, r *http.Request) (ab []byte, cached bool, err er
 		return
 	}
 
-	pr := c.add(p, r)
+	pr, cached := c.add(p, r)
 
 	go func() {
 		reqFile := util.CacheName(p.Hash()) + `-req.json`
