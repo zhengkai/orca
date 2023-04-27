@@ -16,7 +16,7 @@ func Server() {
 	mux := http.NewServeMux()
 
 	mux.Handle(`/_metrics`, promhttp.Handler())
-	mux.HandleFunc(`/`, core.NewCore().WebHandle)
+	mux.Handle(`/`, core.NewCore())
 
 	s := &http.Server{
 		Addr:         config.WebAddr,

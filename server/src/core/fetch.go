@@ -8,43 +8,35 @@ import (
 	"net/url"
 	"project/config"
 	"project/util"
+	"project/zj"
 	"time"
 )
 
 func (pr *row) fetchRemote() (ab []byte, ok bool, err error) {
 
 	r := pr.req
-	var b bytes.Buffer
-	pr.failLog = &b
+	b := pr.log
 
-	u, _ := url.Parse(config.OpenAIBase)
-	u.Path = r.Path
+	u, err := url.Parse(config.OpenAIBase + r.Url)
+	if err != nil {
+		return nil, false, err
+	}
+	zj.J(`real url`, u.String())
 
 	req, err := http.NewRequest(r.Method, u.String(), bytes.NewReader(r.Body))
 	if err != nil {
 		return
 	}
 
-	b.WriteString(pr.hr.URL.String())
-	b.WriteString("\n\nreq header:\n\n")
-	for k, v := range pr.hr.Header {
-		fmt.Fprintf(&b, "\t%s: %v\n", k, v)
-	}
-	b.WriteString("\n")
-	fmt.Fprintf(&b, "req body: %d\n\n", len(r.Body))
-	if len(r.Body) > 0 {
-		fmt.Fprintf(&b, "%s\n\n", r.Body)
-	}
-
-	req.Header.Set(`Content-Type`, `application/json`)
+	req.Header.Set(`Content-Type`, r.ContentType)
 	req.Header.Set(`Authorization`, `Bearer `+config.OpenAIKey)
 
 	client := &http.Client{
-		Timeout: 30 * time.Second,
+		// Timeout: 30 * time.Second,
 	}
 	rsp, err := client.Do(req)
 	if err != nil {
-		fmt.Fprintf(&b, "client.Do fail: %s\n", err.Error())
+		fmt.Fprintf(b, "client.Do fail: %s\n", err.Error())
 		return
 	}
 
@@ -55,15 +47,15 @@ func (pr *row) fetchRemote() (ab []byte, ok bool, err error) {
 		b.WriteString(err.Error())
 	}
 
-	b.WriteString("req header:\n\n")
+	b.WriteString("rsp header:\n\n")
 	for k, v := range rsp.Header {
-		fmt.Fprintf(&b, "\t%s: %v\n", k, v)
+		fmt.Fprintf(b, "\t%s: %v\n", k, v)
 	}
 	b.WriteString("\n")
 
 	ab, err = io.ReadAll(rsp.Body)
-	if err != nil {
-		fmt.Fprintf(&b, "rsp body: %d %v\n\n", len(ab), err)
+	fmt.Fprintf(b, "rsp body: %d %v\n\n", len(ab), err)
+	if err == nil {
 		b.Write(ab)
 	}
 

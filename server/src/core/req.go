@@ -9,20 +9,30 @@ import (
 )
 
 func (c *Core) getAB(p *pb.Req, r *http.Request) (ab []byte, cached bool, err error) {
-	ab, ok := tryCache(p)
-	if ok {
-		cached = true
-		return
+
+	canCache := p.Method != http.MethodGet && p.Method != http.MethodDelete
+
+	canCache = false
+
+	if canCache {
+		var ok bool
+		ab, ok = tryCache(p)
+		if ok {
+			cached = true
+			return
+		}
 	}
 
 	pr, cached := c.add(p, r)
 
-	go func() {
-		reqFile := util.CacheName(p.Hash()) + `-req.json`
-		if !util.FileExists(reqFile) {
-			util.WriteFile(reqFile, p.Body)
-		}
-	}()
+	if canCache {
+		go func() {
+			reqFile := util.CacheName(p.Hash()) + `-req.json`
+			if !util.FileExists(reqFile) {
+				util.WriteFile(reqFile, p.Body)
+			}
+		}()
+	}
 
 	pr.wait()
 
@@ -33,27 +43,31 @@ func (c *Core) getAB(p *pb.Req, r *http.Request) (ab []byte, cached bool, err er
 
 func req(w http.ResponseWriter, r *http.Request) (p *pb.Req, err error) {
 
-	path := r.URL.Path
+	url := r.URL.String()
 	method := r.Method
+	contentType := r.Header.Get(`Content-Type`)
+	if contentType == `` {
+		contentType = `application/json`
+	}
 
-	if path == `/favicon.ico` {
+	if url == `/favicon.ico` {
 		err = errSkip
 		return
 	}
 
-	ab, err := io.ReadAll(http.MaxBytesReader(w, r.Body, 1024*1024))
+	ab, err := io.ReadAll(http.MaxBytesReader(w, r.Body, 1024*1024*10))
+	go util.WriteFile(`last-req.json`, ab)
 	if err != nil {
 		return
 	}
 
-	go util.WriteFile(`last-req.json`, ab)
-
 	p = &pb.Req{
-		Path:   path,
-		Method: method,
-		Body:   ab,
+		Url:         url,
+		Method:      method,
+		ContentType: contentType,
+		Body:        ab,
 	}
-	zj.F(`%x %s %s`, p.Hash(), method, path)
+	zj.F(`%x %s %s %s`, p.Hash(), method, url, contentType)
 	return
 }
 

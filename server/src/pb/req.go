@@ -12,7 +12,7 @@ func (x *Req) Hash() [16]byte {
 
 	io.WriteString(m, x.Method)
 	m.Write([]byte{0x00})
-	io.WriteString(m, x.Method)
+	io.WriteString(m, x.Url)
 	m.Write([]byte{0x00})
 	m.Write(x.Body)
 

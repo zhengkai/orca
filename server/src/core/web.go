@@ -10,7 +10,7 @@ import (
 var errSkip = errors.New(`skip`)
 
 // WebHandle ...
-func (c *Core) WebHandle(w http.ResponseWriter, r *http.Request) {
+func (c *Core) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	p, err := req(w, r)
 	if err != nil {

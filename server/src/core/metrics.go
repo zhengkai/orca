@@ -14,7 +14,11 @@ func doMetrics(ab []byte, cached bool, r *http.Request) {
 	metrics.RspBytes(len(ab))
 
 	o := &pb.Rsp{}
-	json.Unmarshal(ab, o)
+	err := json.Unmarshal(ab, o)
+	if err != nil {
+		zj.J(`unmarshal fail`, err)
+		return
+	}
 
 	u := o.GetUsage()
 	if u == nil {

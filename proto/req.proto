@@ -4,6 +4,7 @@ package pb;
 
 message Req {
 	string method = 1;
-	string path = 2;
-	bytes body = 3;
+	string url = 2;
+	string contentType = 3;
+	bytes body = 4;
 }

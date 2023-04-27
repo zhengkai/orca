@@ -16,6 +16,8 @@ func Start() {
 
 	zj.Init()
 
+	// zj.J(`key`, config.OpenAIKey)
+
 	// tmptest.Test()
 
 	go web.Server()
