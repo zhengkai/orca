@@ -6,6 +6,8 @@ func init() {
 	prometheus.MustRegister(reqCount)
 	prometheus.MustRegister(reqFailCount)
 	prometheus.MustRegister(reqBytes)
+	prometheus.MustRegister(reqConcurrent)
+
 	prometheus.MustRegister(errorCount)
 
 	prometheus.MustRegister(rspBytes)

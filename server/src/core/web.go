@@ -12,6 +12,9 @@ var errSkip = errors.New(`skip`)
 // WebHandle ...
 func (c *Core) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
+	metrics.ReqConcurrentInc()
+	defer metrics.ReqConcurrentDec()
+
 	p, err := req(w, r)
 	if err != nil {
 		if err != errSkip {
