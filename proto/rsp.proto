@@ -3,7 +3,7 @@ option go_package = "/pb";
 package pb;
 
 message Rsp {
-	uint32 id = 1;
+	string id = 1;
 	string object = 2;
 	fixed32 created = 3;
 	string model = 4;

@@ -12,7 +12,7 @@ func (c *Core) getAB(p *pb.Req, r *http.Request) (ab []byte, cached bool, err er
 
 	canCache := p.Method != http.MethodGet && p.Method != http.MethodDelete
 
-	canCache = false
+	// canCache = false
 
 	if canCache {
 		var ok bool

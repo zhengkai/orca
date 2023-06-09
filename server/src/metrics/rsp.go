@@ -10,10 +10,24 @@ var (
 	rspTokenCount       = newCounter(`orca_rsp_token`, `token`)
 	rspTokenCachedCount = newCounter(`orca_rsp_token_cached`, `token cached`)
 	rspJSONFailCount    = newCounter(`orca_rsp_json_fail`, `json fail`)
-	rspTokenByIP        = prometheus.NewCounterVec(
+	rspTokenByModel     = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: `orca_token_by_model`,
+			Help: `token by model`,
+		},
+		[]string{`model`},
+	)
+	rspTokenByKey = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: `orca_token_by_key`,
+			Help: `openai key`,
+		},
+		[]string{`key`},
+	)
+	rspTokenByIP = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
 			Name: `orca_token_by_ip`,
-			Help: `API 返回报错`,
+			Help: `token by ip`,
 		},
 		[]string{`ip`},
 	)
@@ -42,4 +56,19 @@ func RspJSONFail() {
 // RspTokenByIP ...
 func RspTokenByIP(ip string, token uint32) {
 	rspTokenByIP.WithLabelValues(ip).Add(float64(token))
+}
+
+// RspTokenByKey ...
+func RspTokenByKey(key string, token uint32) {
+	if len(key) > 30 {
+		key = key[:30]
+	} else if key == `` {
+		key = `<empty>`
+	}
+	rspTokenByKey.WithLabelValues(key).Add(float64(token))
+}
+
+// RspTokenByModel ...
+func RspTokenByModel(model string, token uint32) {
+	rspTokenByModel.WithLabelValues(model).Add(float64(token))
 }

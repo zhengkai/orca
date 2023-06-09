@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 
-API_HOST="http://10.0.84.49:22035"
-# API_HOST="http://localhost:22035"
+# API_HOST="http://10.0.84.49:22035"
+API_HOST="http://localhost:22035"
 
 curl "${API_HOST}/v1/engines/text-embedding-ada-002/embeddings" \
   -H "Content-Type: application/json" \

@@ -16,4 +16,6 @@ func init() {
 	prometheus.MustRegister(rspTokenCachedCount)
 	prometheus.MustRegister(rspJSONFailCount)
 	prometheus.MustRegister(rspTokenByIP)
+	prometheus.MustRegister(rspTokenByModel)
+	prometheus.MustRegister(rspTokenByKey)
 }
