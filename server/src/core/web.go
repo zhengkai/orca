@@ -36,5 +36,5 @@ func (c *Core) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add(`Content-Type`, `application/json`)
 	w.Write(ab)
 
-	go doMetrics(ab, cached, r)
+	go doMetrics(ab, cached, r, len(p.Body))
 }

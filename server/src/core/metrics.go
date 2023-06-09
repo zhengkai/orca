@@ -3,16 +3,20 @@ package core
 import (
 	"encoding/json"
 	"net/http"
+	"project/es"
 	"project/metrics"
 	"project/pb"
 	"project/util"
 	"project/zj"
 	"strings"
+
+	"github.com/zhengkai/zu"
 )
 
-func doMetrics(ab []byte, cached bool, r *http.Request) {
+func doMetrics(ab []byte, cached bool, r *http.Request, reqBytes int) {
 
-	metrics.RspBytes(len(ab))
+	rspBytes := len(ab)
+	metrics.RspBytes(rspBytes)
 
 	o := &pb.Rsp{}
 	err := json.Unmarshal(ab, o)
@@ -35,7 +39,8 @@ func doMetrics(ab []byte, cached bool, r *http.Request) {
 
 	metrics.RspTokenByModel(o.Model, u.TotalTokens)
 
-	metrics.RspTokenByKey(strings.TrimPrefix(r.Header.Get(`Authorization`), `Bearer `), u.TotalTokens)
+	key := strings.TrimPrefix(r.Header.Get(`Authorization`), `Bearer `)
+	metrics.RspTokenByKey(key, u.TotalTokens)
 
 	ip, err := util.GetIP(r)
 	sip := ip.String()
@@ -43,4 +48,21 @@ func doMetrics(ab []byte, cached bool, r *http.Request) {
 		sip = `unknown`
 	}
 	metrics.RspTokenByIP(sip, u.TotalTokens)
+
+	d := &pb.EsMetrics{
+		ID: o.Id,
+		Token: &pb.EsMetricsToken{
+			Total:      u.TotalTokens,
+			Completion: u.CompletionTokens,
+			Prompt:     u.PromptTokens,
+		},
+		Cached:   cached,
+		Ip:       sip,
+		Model:    o.Model,
+		Key:      key,
+		ReqBytes: uint32(reqBytes),
+		RspBytes: uint32(rspBytes),
+		Ts:       zu.MS(),
+	}
+	go es.Insert(d)
 }

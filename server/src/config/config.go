@@ -13,4 +13,7 @@ var (
 	OpenAIBase = `https://api.openai.com`
 
 	OpenAIKey = ``
+
+	ESUser = ``
+	ESPass = ``
 )

@@ -3,6 +3,7 @@ package project
 import (
 	"project/build"
 	"project/config"
+	"project/es"
 	"project/web"
 	"project/zj"
 
@@ -16,9 +17,11 @@ func Start() {
 
 	zj.Init()
 
-	// zj.J(`key`, config.OpenAIKey)
+	es.Init()
 
-	// tmptest.Test()
+	if !config.Prod {
+		go es.Test()
+	}
 
 	go web.Server()
 

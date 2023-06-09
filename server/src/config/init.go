@@ -17,6 +17,8 @@ func init() {
 		`STATIC_DIR`:     &StaticDir,
 		`ORCA_WEB`:       &WebAddr,
 		`ORCA_LOG`:       &LogDir,
+		`ORCA_ES_USER`:   &ESUser,
+		`ORCA_ES_PASS`:   &ESPass,
 	}
 	for k, v := range list {
 		s := os.Getenv(k)
