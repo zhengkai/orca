@@ -22,7 +22,9 @@ func Insert(d *pb.EsMetrics) {
 
 	// theClient.Create(`orca-metrics`, d.ID, bytes.NewReader(ab))
 
-	re, err := theClient.Index(`orca-metrics`, bytes.NewReader(ab))
+	index := indexName(uint32(d.Ts / 1000))
+
+	re, err := theClient.Index(index, bytes.NewReader(ab))
 	if err != nil {
 		return
 	}

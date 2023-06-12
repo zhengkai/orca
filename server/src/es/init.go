@@ -28,5 +28,7 @@ func Init() (err error) {
 
 	zj.J(`elasticsearch`, res.String())
 
+	createIndex()
+
 	return
 }

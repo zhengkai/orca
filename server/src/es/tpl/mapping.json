@@ -1,0 +1,43 @@
+{
+	"mappings": {
+		"properties": {
+			"ID": {
+				"type": "keyword"
+			},
+			"token": {
+				"properties": {
+					"total": {
+						"type": "long"
+					},
+					"completion": {
+						"type": "long"
+					},
+					"prompt": {
+						"type": "long"
+					}
+				}
+			},
+			"cached": {
+				"type": "boolean"
+			},
+			"ip": {
+				"type": "ip"
+			},
+			"model": {
+				"type": "keyword"
+			},
+			"key": {
+				"type": "keyword"
+			},
+			"reqBytes": {
+				"type": "long"
+			},
+			"rspBytes": {
+				"type": "long"
+			},
+			"ts": {
+				"type": "date"
+			}
+		}
+	}
+}
