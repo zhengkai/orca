@@ -2,6 +2,7 @@ package core
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"project/es"
 	"project/metrics"
@@ -13,7 +14,7 @@ import (
 	"github.com/zhengkai/zu"
 )
 
-func doMetrics(ab []byte, cached bool, r *http.Request, reqBytes int) {
+func doMetrics(ab []byte, cached bool, r *http.Request, req *pb.Req) {
 
 	rspBytes := len(ab)
 	metrics.RspBytes(rspBytes)
@@ -60,9 +61,10 @@ func doMetrics(ab []byte, cached bool, r *http.Request, reqBytes int) {
 		Ip:       sip,
 		Model:    o.Model,
 		Key:      key,
-		ReqBytes: uint32(reqBytes),
+		ReqBytes: uint32(len(req.Body)),
 		RspBytes: uint32(rspBytes),
 		Ts:       zu.MS(),
+		Hash:     fmt.Sprintf(`%x`, req.Hash()),
 	}
 	go es.Insert(d)
 }
