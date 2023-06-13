@@ -14,6 +14,7 @@ var (
 
 	OpenAIKey = ``
 
+	ESAddr = ``
 	ESUser = ``
 	ESPass = ``
 )

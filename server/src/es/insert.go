@@ -2,8 +2,9 @@ package es
 
 import (
 	"bytes"
-	"encoding/json"
 	"project/pb"
+
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 // Insert ...
@@ -13,7 +14,10 @@ func Insert(d *pb.EsMetrics) {
 		return
 	}
 
-	ab, err := json.Marshal(d)
+	ab, err := protojson.MarshalOptions{
+		EmitUnpopulated: true,
+		AllowPartial:    true,
+	}.Marshal(d)
 	if err != nil {
 		return
 	}

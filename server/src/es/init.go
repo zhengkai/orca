@@ -12,10 +12,15 @@ var theClient *elasticsearch.Client
 // Init ...
 func Init() (err error) {
 
-	theClient, err = elasticsearch.NewClient(elasticsearch.Config{
+	cfg := elasticsearch.Config{
 		Username: config.ESUser,
 		Password: config.ESPass,
-	})
+	}
+	if config.ESAddr != `` {
+		cfg.Addresses = []string{config.ESAddr}
+	}
+
+	theClient, err = elasticsearch.NewClient(cfg)
 	if err != nil {
 		return err
 	}

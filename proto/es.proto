@@ -12,6 +12,7 @@ message EsMetrics {
 	uint32 reqBytes = 7;
 	uint32 rspBytes = 8;
 	uint64 ts = 9;
+	string hash = 10;
 }
 
 message EsMetricsToken {

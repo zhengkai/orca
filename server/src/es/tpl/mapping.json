@@ -37,6 +37,9 @@
 			},
 			"ts": {
 				"type": "date"
+			},
+			"hash": {
+				"type": "keyword"
 			}
 		}
 	}
