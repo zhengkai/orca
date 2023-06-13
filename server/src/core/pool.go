@@ -3,7 +3,6 @@ package core
 import (
 	"net/http"
 	"project/pb"
-	"project/zj"
 	"time"
 )
 
@@ -13,8 +12,8 @@ func (c *Core) add(req *pb.Req, hr *http.Request) (pr *row, cached bool) {
 
 	c.mux.Lock()
 	pr, ok := c.pool[hash]
-	if false && ok {
-		zj.F(`hit %x`, hash)
+	if ok {
+		// zj.F(`hit %x`, hash)
 		c.mux.Unlock()
 		cached = true
 		return

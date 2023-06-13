@@ -8,7 +8,6 @@ import (
 	"net/url"
 	"project/config"
 	"project/util"
-	"project/zj"
 	"time"
 )
 
@@ -21,7 +20,7 @@ func (pr *row) fetchRemote() (ab []byte, ok bool, err error) {
 	if err != nil {
 		return nil, false, err
 	}
-	zj.J(`real url`, u.String())
+	// zj.J(`real url`, u.String())
 
 	req, err := http.NewRequest(r.Method, u.String(), bytes.NewReader(r.Body))
 	if err != nil {

@@ -22,7 +22,7 @@ func doMetrics(ab []byte, cached bool, r *http.Request, req *pb.Req) {
 	o := &pb.Rsp{}
 	err := json.Unmarshal(ab, o)
 	if err != nil {
-		zj.J(`unmarshal fail`, err)
+		zj.W(`unmarshal fail`, err)
 		util.WriteFile(`metrics-json-fail`, ab)
 		return
 	}

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"net/http"
 	"project/metrics"
-	"project/zj"
 )
 
 var errSkip = errors.New(`skip`)
@@ -31,7 +30,7 @@ func (c *Core) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		err500(w)
 		return
 	}
-	zj.J(`cached`, cached)
+	// zj.J(`cached`, cached)
 
 	w.Header().Add(`Content-Type`, `application/json`)
 	w.Write(ab)

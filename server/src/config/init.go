@@ -33,4 +33,6 @@ func init() {
 		fmt.Println(`OpenAI base URL is invalid.`)
 		panic(err)
 	}
+
+	os.MkdirAll(StaticDir+`/tmp`, 0777)
 }

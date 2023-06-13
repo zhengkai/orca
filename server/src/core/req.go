@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"project/pb"
 	"project/util"
-	"project/zj"
 )
 
 func (c *Core) getAB(p *pb.Req, r *http.Request) (ab []byte, cached bool, err error) {
@@ -67,7 +66,7 @@ func req(w http.ResponseWriter, r *http.Request) (p *pb.Req, err error) {
 		ContentType: contentType,
 		Body:        ab,
 	}
-	zj.F(`%x %s %s %s`, p.Hash(), method, url, contentType)
+	// zj.F(`%x %s %s %s`, p.Hash(), method, url, contentType)
 	return
 }
 
