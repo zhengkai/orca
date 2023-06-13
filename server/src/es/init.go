@@ -12,6 +12,10 @@ var theClient *elasticsearch.Client
 // Init ...
 func Init() (err error) {
 
+	if config.ESUser == `` && config.ESPass == `` {
+		return
+	}
+
 	cfg := elasticsearch.Config{
 		Username: config.ESUser,
 		Password: config.ESPass,
@@ -31,7 +35,7 @@ func Init() (err error) {
 	}
 	defer res.Body.Close()
 
-	zj.J(`elasticsearch`, res.String())
+	zj.J(`elastic`, res.String())
 
 	createIndex()
 

@@ -21,6 +21,8 @@ COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /usr/share/zoneinfo/Asia/Shanghai /usr/share/zoneinfo/Asia/
 COPY --from=builder /project/server/dist/prod/orca-server-next /orca-server
 
+COPY ./misc/docker/http-ca.crt /etc/ssl/certs/elastic-http-ca.crt
+
 RUN apk add --no-cache gzip brotli
 
 ENV TZ="Asia/Shanghai"

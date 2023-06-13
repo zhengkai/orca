@@ -22,7 +22,7 @@ func indexName(ts uint32) string {
 		index = `dev-` + index
 	}
 
-	index = fmt.Sprintf(`%s-%s`, index, time.Unix(int64(ts), 0).Format(`2006-01-02`))
+	index = fmt.Sprintf(`%s-%s`, index, time.Unix(int64(ts), 0).Format(`2006.01.02`))
 
 	return index
 }

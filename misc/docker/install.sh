@@ -22,6 +22,9 @@ sudo cat /tmp/docker-orca.tar | sudo docker load
 
 sudo docker run -d --name orca \
 	--env "OPENAI_API_KEY=${OPENAI_API_KEY}" \
+	--env "ORCA_ES_ADDR=${ORCA_ES_ADDR}" \
+	--env "ORCA_ES_USER=${ORCA_ES_USER}" \
+	--env "ORCA_ES_PASS=${ORCA_ES_PASS}" \
 	--mount type=bind,source=/www/orca/log,target=/log \
 	--mount type=bind,source=/www/orca/static,target=/tmp \
 	-p 127.0.0.1:21035:80 \

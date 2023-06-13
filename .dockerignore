@@ -1,0 +1,6 @@
+/misc/
+!/misc/docker/http-ca.crt
+/static/
+/client/
+/server/dist
+/server/build/env.sh

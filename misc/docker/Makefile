@@ -1,5 +1,7 @@
 SHELL:=/bin/bash
 
+TARGET_HOST:=lamia
+
 include ../../server/build/env.sh
 
 build: git
@@ -7,10 +9,10 @@ build: git
 
 run: build
 	sudo docker run \
-		--env "OPENAI_API_KEY=$(OPENAI_API_KEY)" \
-		--env "ORCA_ES_ADDR=$(ORCA_ES_ADDR)" \
-		--env "ORCA_ES_USER=$(ORCA_ES_USER)" \
-		--env "ORCA_ES_PASS=$(ORCA_ES_PASS)" \
+		--env OPENAI_API_KEY=$(OPENAI_API_KEY) \
+		--env ORCA_ES_ADDR=$(ORCA_ES_ADDR) \
+		--env ORCA_ES_USER=$(ORCA_ES_USER) \
+		--env ORCA_ES_PASS=$(ORCA_ES_PASS) \
 		--mount type=bind,source=/www/orca/static,target=/tmp \
 		--mount type=bind,source=/www/orca/server/dist/prod/log,target=/log \
 		-p 127.0.0.1:21035:80 \
@@ -18,11 +20,11 @@ run: build
 
 install: build
 	sudo docker save orca > docker-orca.tar
-	scp docker-orca.tar lamia:/tmp
-	scp install.sh lamia:/tmp
-	scp ../../server/build/env.sh lamia:/tmp
-	ssh lamia "chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh"
-	ssh lamia "rm /tmp/env.sh"
+	scp docker-orca.tar $(TARGET_HOST):/tmp
+	scp install.sh $(TARGET_HOST):/tmp
+	scp ../../server/build/env.sh $(TARGET_HOST):/tmp
+	ssh $(TARGET_HOST) "chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh"
+	ssh $(TARGET_HOST) "rm /tmp/env.sh"
 
 nginx:
 	scp ../nginx/prod.conf lamia:/etc/nginx/vhost.d/600-orca
