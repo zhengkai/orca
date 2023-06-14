@@ -25,9 +25,10 @@ func Insert(d *pb.EsMetrics) {
 
 	index := indexName(uint32(d.Ts / 1000))
 
-	_, err = theClient.Index(index, bytes.NewReader(ab))
+	re, err := theClient.Index(index, bytes.NewReader(ab))
 	if err != nil {
 		zj.W(`insert fail:`, err)
 		return
 	}
+	re.Body.Close()
 }
