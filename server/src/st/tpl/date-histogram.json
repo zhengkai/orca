@@ -1,0 +1,46 @@
+{
+	"size": 0,
+		"query": {
+			"range": {
+				"ts": {
+					"gte": "%s",
+					"lt": "%s"
+				}
+			}
+		},
+		"aggs": {
+			"bytes_sum": {
+				"date_histogram": {
+					"field": "ts",
+					"calendar_interval": "1m"
+				},
+				"aggs": {
+					"tokenTotal": {
+						"sum": {
+							"field": "token.total"
+						}
+					},
+					"tokenCompletion": {
+						"sum": {
+							"field": "token.completion"
+						}
+					},
+					"tokenPrompt": {
+						"sum": {
+							"field": "token.prompt"
+						}
+					},
+					"reqBytes": {
+						"sum": {
+							"field": "reqBytes"
+						}
+					},
+					"rspBytes": {
+						"sum": {
+							"field": "rspBytes"
+						}
+					}
+				}
+			}
+		}
+}

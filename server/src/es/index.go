@@ -15,16 +15,20 @@ import (
 //go:embed tpl/mapping.json
 var indexMapping string
 
-func indexName(ts uint32) string {
-
+func indexNameBase() string {
 	index := `orca-metrics`
 	if !config.Prod {
 		index = `dev-` + index
 	}
-
-	index = fmt.Sprintf(`%s-%s`, index, time.Unix(int64(ts), 0).Format(`2006.01.02`))
-
 	return index
+}
+
+func indexName(ts uint32) string {
+	return fmt.Sprintf(`%s-%s`, indexNameBase(), time.Unix(int64(ts), 0).Format(`2006.01.02`))
+}
+
+func indexNameAll() string {
+	return indexNameBase() + `-*`
 }
 
 func createIndex() {

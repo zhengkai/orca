@@ -20,3 +20,63 @@ message EsMetricsToken {
 	uint32 completion = 2;
 	uint32 prompt = 3;
 }
+
+message EsErrorTry {
+	EsError error = 1;
+	uint32 status = 2;
+}
+
+message EsError {
+	repeated EsErrorRootCause root_cause = 1;
+	string type = 2;
+	string reason = 3;
+	uint32 line = 4;
+	uint32 col = 5;
+}
+
+message EsErrorRootCause {
+	string type = 1;
+	string reason = 2;
+	uint32 line = 3;
+	uint32 col = 4;
+}
+
+message EsResultDateHistogram {
+	EsResultDateHistogramAggregations aggregations = 1;
+}
+
+message EsResultDateHistogramAggregations {
+	EsResultDateHistogramSum bytes_sum = 1;
+}
+
+message EsResultDateHistogramSum {
+	repeated EsResultDateHistogramBucket buckets = 1;
+}
+
+message EsResultDateHistogramBucket {
+	EsResultValueInt reqBytes = 1;
+	EsResultValueInt rspBytes = 2;
+	EsResultValueInt tokenTotal = 3;
+	EsResultValueInt tokenCompletion = 4;
+	EsResultValueInt tokenPrompt = 5;
+	uint32 doc_count = 6;
+	uint64 key = 7;
+}
+
+message EsDateHistogramList {
+	repeated EsDateHistogram list = 1;
+}
+
+message EsDateHistogram {
+	uint32 reqBytes = 1;
+	uint32 rspBytes = 2;
+	uint32 tokenTotal = 3;
+	uint32 tokenCompletion = 4;
+	uint32 tokenPrompt = 5;
+	uint32 count = 6;
+	uint32 ts = 7;
+}
+
+message EsResultValueInt {
+	uint32 value = 1;
+}

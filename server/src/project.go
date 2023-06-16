@@ -20,6 +20,8 @@ func Start() {
 	es.Init()
 
 	if !config.Prod {
+		// es.LastItem()
+		// st.DateHistogram()
 		go es.Test()
 	}
 

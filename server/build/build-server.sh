@@ -9,6 +9,10 @@ fi
 
 . ./common.sh
 
+if [ ! -e ../src/pb/req.pb.go ]; then
+	(cd ../../proto && protoc --go_out=../server/src ./*.proto)
+fi
+
 DATE=$(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')
 GO_VERSION=$(go version)
 GIT_VERSION=$(./git-hash.sh)
