@@ -11,14 +11,14 @@ import (
 	"time"
 )
 
-func (pr *row) fetchRemote() (ab []byte, ok bool, err error) {
+func (pr *row) fetchRemote() (ab []byte, err error) {
 
 	r := pr.req
 	b := pr.log
 
 	u, err := url.Parse(config.OpenAIBase + r.Url)
 	if err != nil {
-		return nil, false, err
+		return nil, err
 	}
 	// zj.J(`real url`, u.String())
 
@@ -39,9 +39,7 @@ func (pr *row) fetchRemote() (ab []byte, ok bool, err error) {
 		return
 	}
 
-	if rsp.StatusCode >= 200 || rsp.StatusCode < 300 {
-		ok = true
-	} else {
+	if rsp.StatusCode < 200 || rsp.StatusCode >= 300 {
 		err = fmt.Errorf(`status code fail: %d`, rsp.StatusCode)
 		b.WriteString(err.Error())
 	}

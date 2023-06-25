@@ -19,15 +19,27 @@ func (c *Core) add(req *pb.Req, hr *http.Request) (pr *row, cached bool) {
 		return
 	}
 
+	c.serial++
 	pr = &row{
-		hr:   hr,
-		hash: hash,
-		req:  req,
-		t:    time.Now(),
+		serial: c.serial,
+		hr:     hr,
+		hash:   hash,
+		req:    req,
+		t:      time.Now(),
+		core:   c,
 	}
 	pr.mux.Lock()
 	go pr.run()
 	c.pool[hash] = pr
 	c.mux.Unlock()
 	return
+}
+
+func (c *Core) delete(r *row) {
+	c.mux.Lock()
+	pr, ok := c.pool[r.hash]
+	if ok && pr == r {
+		delete(c.pool, r.hash)
+	}
+	c.mux.Unlock()
 }

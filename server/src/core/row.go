@@ -11,15 +11,22 @@ import (
 )
 
 type row struct {
-	hash [16]byte
-	hr   *http.Request
-	req  *pb.Req
-	rsp  []byte
-	err  error
-	done bool
-	t    time.Time
-	mux  sync.RWMutex
-	log  *bytes.Buffer
+	serial int
+	hash   [16]byte
+	hr     *http.Request
+	req    *pb.Req
+	rsp    []byte
+	err    error
+	done   bool
+	t      time.Time
+	mux    sync.RWMutex
+	log    *bytes.Buffer
+	core   *Core
+}
+
+func (pr *row) suicide() {
+	pr.core.delete(pr)
+	pr.core = nil
 }
 
 func (pr *row) run() {
@@ -33,20 +40,20 @@ func (pr *row) run() {
 		// return
 	}
 
-	var ok bool
-	pr.rsp, ok, pr.err = pr.fetchRemote()
-	if pr.err == nil && ok {
-		// pr.failLog.Reset()
-		go writeFailLog(pr.hash, pr.log.Bytes())
-	} else {
-		go writeFailLog(pr.hash, pr.log.Bytes())
-	}
-
-	go pr.saveFile()
-	// go pr.metrics()
-
+	pr.rsp, pr.err = pr.fetchRemote()
 	pr.done = true
 	pr.mux.Unlock()
+
+	// go pr.metrics()
+
+	if pr.err == nil {
+		// pr.failLog.Reset()
+		// go writeFailLog(pr.hash, pr.log.Bytes())
+		go pr.saveFile()
+	} else {
+		go writeFailLog(pr.hash, pr.log.Bytes())
+		go pr.suicide()
+	}
 }
 
 func (pr *row) wait() {

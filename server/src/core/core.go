@@ -4,8 +4,9 @@ import "sync"
 
 // Core ...
 type Core struct {
-	pool map[[16]byte]*row
-	mux  sync.Mutex
+	serial int
+	pool   map[[16]byte]*row
+	mux    sync.Mutex
 }
 
 // NewCore ...
