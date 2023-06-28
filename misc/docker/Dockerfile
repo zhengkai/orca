@@ -5,7 +5,7 @@ FROM golang:latest as builder
 ARG DOCKER_RUNNING=yes
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -yq protobuf-compiler tzdata ca-certificates
-RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.30.0
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.31.0
 
 COPY . /project
 
