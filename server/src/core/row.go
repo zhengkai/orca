@@ -6,22 +6,24 @@ import (
 	"net/http"
 	"project/pb"
 	"project/util"
+	"project/zj"
 	"sync"
 	"time"
 )
 
 type row struct {
-	serial int
-	hash   [16]byte
-	hr     *http.Request
-	req    *pb.Req
-	rsp    []byte
-	err    error
-	done   bool
-	t      time.Time
-	mux    sync.RWMutex
-	log    *bytes.Buffer
-	core   *Core
+	serial   int
+	hash     [16]byte
+	hr       *http.Request
+	req      *pb.Req
+	rsp      []byte
+	err      error
+	httpCode int
+	done     bool
+	t        time.Time
+	mux      sync.RWMutex
+	log      *bytes.Buffer
+	core     *Core
 }
 
 func (pr *row) suicide() {
@@ -44,16 +46,19 @@ func (pr *row) run() {
 	pr.done = true
 	pr.mux.Unlock()
 
+	if pr.err != nil {
+		zj.W(pr.err)
+	}
+
 	// go pr.metrics()
 
+	go writeFailLog(pr.hash, pr.log.Bytes())
 	if pr.err == nil {
 		// pr.failLog.Reset()
 		// go writeFailLog(pr.hash, pr.log.Bytes())
-		go pr.saveFile()
-	} else {
-		go writeFailLog(pr.hash, pr.log.Bytes())
-		go pr.suicide()
+		pr.saveFile()
 	}
+	pr.suicide()
 }
 
 func (pr *row) wait() {

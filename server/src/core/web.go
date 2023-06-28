@@ -19,21 +19,24 @@ func (c *Core) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		if err != errSkip {
 			metrics.ReqFailCount()
 		}
-		err500(w)
 		return
 	}
 
 	metrics.ReqBytes(len(p.Body))
 
-	ab, cached, err := c.getAB(p, r)
+	ab, cached, pr, err := c.getAB(p, r)
 	if err != nil {
-		err500(w)
-		return
+		if pr.httpCode != 0 {
+			pr.httpCode = http.StatusInternalServerError
+		}
+		w.WriteHeader(pr.httpCode)
 	}
 	// zj.J(`cached`, cached)
 
-	w.Header().Add(`Content-Type`, `application/json`)
-	w.Write(ab)
+	if len(ab) > 0 {
+		w.Header().Add(`Content-Type`, `application/json`)
+		w.Write(ab)
+	}
 
 	go doMetrics(ab, cached, r, p)
 }

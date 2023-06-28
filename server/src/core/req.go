@@ -7,7 +7,7 @@ import (
 	"project/util"
 )
 
-func (c *Core) getAB(p *pb.Req, r *http.Request) (ab []byte, cached bool, err error) {
+func (c *Core) getAB(p *pb.Req, r *http.Request) (ab []byte, cached bool, pr *row, err error) {
 
 	canCache := p.Method != http.MethodGet && p.Method != http.MethodDelete
 
@@ -22,7 +22,7 @@ func (c *Core) getAB(p *pb.Req, r *http.Request) (ab []byte, cached bool, err er
 		}
 	}
 
-	pr, cached := c.add(p, r)
+	pr, cached = c.add(p, r)
 
 	if canCache {
 		go func() {
@@ -51,6 +51,7 @@ func req(w http.ResponseWriter, r *http.Request) (p *pb.Req, err error) {
 
 	if url == `/favicon.ico` {
 		err = errSkip
+		err500(w)
 		return
 	}
 

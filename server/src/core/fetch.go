@@ -2,11 +2,15 @@ package core
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
+	"os"
+	"path"
 	"project/config"
+	"project/pb"
 	"project/util"
 	"time"
 )
@@ -20,7 +24,6 @@ func (pr *row) fetchRemote() (ab []byte, err error) {
 	if err != nil {
 		return nil, err
 	}
-	// zj.J(`real url`, u.String())
 
 	req, err := http.NewRequest(r.Method, u.String(), bytes.NewReader(r.Body))
 	if err != nil {
@@ -40,6 +43,7 @@ func (pr *row) fetchRemote() (ab []byte, err error) {
 	}
 
 	if rsp.StatusCode < 200 || rsp.StatusCode >= 300 {
+		pr.httpCode = rsp.StatusCode
 		err = fmt.Errorf(`status code fail: %d`, rsp.StatusCode)
 		b.WriteString(err.Error())
 	}
@@ -52,16 +56,24 @@ func (pr *row) fetchRemote() (ab []byte, err error) {
 
 	ab, err = io.ReadAll(rsp.Body)
 	fmt.Fprintf(b, "rsp body: %d %v\n\n", len(ab), err)
-	if err == nil {
-		b.Write(ab)
-	}
+	b.Write(ab)
 
 	rsp.Body.Close()
+
+	if err == nil {
+		e := &pb.OpenAIError{}
+		json.Unmarshal(ab, e)
+		if e.GetError() != nil {
+			err = fmt.Errorf(`openai error: %s`, e.GetError().GetMessage())
+		}
+	}
+
 	return
 }
 
 func writeFailLog(hash [16]byte, ab []byte) {
-	date := time.Now().Format(`0102-150405`)
+	date := time.Now().Format(`0102/150405`)
 	file := fmt.Sprintf(`fail/%s-%x.txt`, date, hash)
+	os.MkdirAll(path.Dir(util.StaticFile(file)), 0755)
 	util.WriteFile(file, ab)
 }
