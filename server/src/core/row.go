@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"project/pb"
 	"project/util"
-	"project/zj"
 	"sync"
 	"time"
 )
@@ -37,26 +36,14 @@ func (pr *row) run() {
 
 	pr.startLog()
 
-	if pr.req.Method != http.MethodGet {
-		// pr.mux.Unlock()
-		// return
-	}
-
 	pr.rsp, pr.err = pr.fetchRemote()
 	pr.done = true
 	pr.mux.Unlock()
 
-	if pr.err != nil {
-		zj.W(pr.err)
-	}
-
-	// go pr.metrics()
-
-	go writeFailLog(pr.hash, pr.log.Bytes())
 	if pr.err == nil {
-		// pr.failLog.Reset()
-		// go writeFailLog(pr.hash, pr.log.Bytes())
 		pr.saveFile()
+	} else {
+		go writeFailLog(pr.hash, pr.log.Bytes())
 	}
 	pr.suicide()
 }

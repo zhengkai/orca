@@ -46,6 +46,7 @@ func (pr *row) fetchRemote() (ab []byte, err error) {
 		pr.httpCode = rsp.StatusCode
 		err = fmt.Errorf(`status code fail: %d`, rsp.StatusCode)
 		b.WriteString(err.Error())
+		b.WriteString("\n\n")
 	}
 
 	b.WriteString("rsp header:\n\n")
