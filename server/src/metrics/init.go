@@ -18,4 +18,7 @@ func init() {
 	prometheus.MustRegister(rspTokenByIP)
 	prometheus.MustRegister(rspTokenByModel)
 	prometheus.MustRegister(rspTokenByKey)
+
+	prometheus.MustRegister(limitReq)
+	prometheus.MustRegister(limitToken)
 }

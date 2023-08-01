@@ -10,6 +10,7 @@ import (
 	"os"
 	"path"
 	"project/config"
+	"project/metrics"
 	"project/pb"
 	"project/util"
 	"time"
@@ -60,6 +61,8 @@ func (pr *row) fetchRemote() (ab []byte, err error) {
 	b.Write(ab)
 
 	rsp.Body.Close()
+
+	metrics.Limit(rsp.Header)
 
 	if err == nil {
 		e := &pb.OpenAIError{}

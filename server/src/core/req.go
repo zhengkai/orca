@@ -5,11 +5,15 @@ import (
 	"net/http"
 	"project/pb"
 	"project/util"
+	"strings"
 )
 
 func (c *Core) getAB(p *pb.Req, r *http.Request) (ab []byte, cached bool, pr *row, err error) {
 
 	canCache := p.Method != http.MethodGet && p.Method != http.MethodDelete
+	if strings.Contains(r.Header.Get(`Authorization`), `no-cache`) {
+		canCache = false
+	}
 
 	// canCache = false
 

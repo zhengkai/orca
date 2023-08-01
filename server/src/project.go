@@ -22,7 +22,7 @@ func Start() {
 	if !config.Prod {
 		// es.LastItem()
 		// st.DateHistogram()
-		go es.Test()
+		// go es.Test()
 	}
 
 	go web.Server()

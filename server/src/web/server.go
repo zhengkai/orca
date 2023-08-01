@@ -16,6 +16,7 @@ func Server() {
 	mux := http.NewServeMux()
 
 	mux.Handle(`/_metrics`, promhttp.Handler())
+	mux.Handle(`/v1/moderations`, core.NewCore())
 	mux.Handle(`/v1/completions`, core.NewCore())
 	mux.Handle(`/v1/chat/completions`, core.NewCore())
 
