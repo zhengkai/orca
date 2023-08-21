@@ -32,8 +32,9 @@ rachel: build
 	scp docker-orca.tar $(RACHEL_HOST):/tmp
 	scp install.sh $(RACHEL_HOST):/tmp
 	scp ../../server/build/env.sh $(RACHEL_HOST):/tmp
+	ssh $(RACHEL_HOST) "sed -i '/ES/d' /tmp/env.sh"
 	ssh $(RACHEL_HOST) "chmod +x /tmp/install.sh && /tmp/install.sh && rm /tmp/install.sh"
-	ssh $(RACHEL_HOST) "rm /tmp/env.sh"
+	# ssh $(RACHEL_HOST) "rm /tmp/env.sh"
 
 nginx:
 	scp ../nginx/prod.conf lamia:/etc/nginx/vhost.d/600-orca

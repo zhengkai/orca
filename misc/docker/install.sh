@@ -2,7 +2,7 @@
 
 TARGET="Lamia"
 
-if [ "$HOSTNAME" != "$TARGET" ]; then
+if [ "$HOSTNAME" != "$TARGET" ] && [ "$HOSTNAME" != "Rachel" ]; then
 	>&2 echo only run in server "$TARGET"
 	exit 1
 fi
