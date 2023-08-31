@@ -33,22 +33,20 @@ func doMetrics(ab []byte, cached bool, r *http.Request, req *pb.Req) {
 		return
 	}
 
-	metrics.RspToken(u.PromptTokens, u.TotalTokens, cached)
-	if !cached {
-		zj.J(`token`, u.PromptTokens, u.TotalTokens)
-	}
-
-	metrics.RspTokenByModel(o.Model, u.TotalTokens)
-
-	key := strings.TrimPrefix(r.Header.Get(`Authorization`), `Bearer `)
-	metrics.RspTokenByKey(key, u.TotalTokens)
-
 	ip, err := util.GetIP(r)
 	sip := ip.String()
 	if err != nil {
 		sip = `unknown`
 	}
-	metrics.RspTokenByIP(sip, u.TotalTokens)
+
+	key := strings.TrimPrefix(r.Header.Get(`Authorization`), `Bearer `)
+
+	metrics.RspToken(u.PromptTokens, u.TotalTokens, cached)
+	if !cached {
+		metrics.RspTokenByModel(o.Model, u.TotalTokens)
+		metrics.RspTokenByKey(key, u.TotalTokens)
+		metrics.RspTokenByIP(sip, u.TotalTokens)
+	}
 
 	d := &pb.EsMetrics{
 		ID: o.Id,
