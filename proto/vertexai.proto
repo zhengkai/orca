@@ -1,0 +1,17 @@
+syntax = "proto3";
+option go_package = "/pb";
+package pb;
+
+message VaChatReq {
+	string system = 1;
+	repeated string user = 2;
+	bool noCache = 3;
+	VaParam param = 4;
+}
+
+message VaParam {
+	float temperature = 1;
+	uint32 maxOutputTokens = 2;
+	float topP = 3;
+	uint32 topK = 4;
+}
