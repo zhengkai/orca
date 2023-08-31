@@ -37,7 +37,6 @@ func IsURL(s string) bool {
 // ReadFile ...
 func ReadFile(file string) (ab []byte, err error) {
 	ab, err = os.ReadFile(StaticFile(file))
-	zj.Watch(&err)
 	return
 }
 

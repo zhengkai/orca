@@ -8,9 +8,6 @@ import (
 func tryCache(p *pb.Req) ([]byte, bool) {
 
 	file := rspCacheFile(p)
-	if !util.FileExists(file) {
-		return nil, false
-	}
 
 	ab, err := util.ReadFile(file)
 	if err != nil {

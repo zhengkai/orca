@@ -1,6 +1,6 @@
 module project
 
-go 1.20
+go 1.21.0
 
 require (
 	github.com/elastic/go-elasticsearch/v8 v8.9.0
