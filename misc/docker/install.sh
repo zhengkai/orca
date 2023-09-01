@@ -12,6 +12,7 @@ if [ ! -e ./env.sh ]; then
 	>&2 echo no env file
 	exit 1
 fi
+
 . ./env.sh || exit 1
 
 sudo docker stop orca
@@ -25,6 +26,7 @@ sudo docker run -d --name orca \
 	--env "ORCA_ES_ADDR=${ORCA_ES_ADDR}" \
 	--env "ORCA_ES_USER=${ORCA_ES_USER}" \
 	--env "ORCA_ES_PASS=${ORCA_ES_PASS}" \
+	--env "ORCA_VA_TOKEN=${ORCA_VA_TOKEN}" \
 	--mount type=bind,source=/www/orca/log,target=/log \
 	--mount type=bind,source=/www/orca/static,target=/tmp \
 	-p 127.0.0.1:21035:80 \
