@@ -78,6 +78,6 @@ func (pr *row) fetchRemote() (ab []byte, err error) {
 func writeFailLog(hash [16]byte, ab []byte) {
 	date := time.Now().Format(`0102/150405`)
 	file := fmt.Sprintf(`fail/%s-%x.txt`, date, hash)
-	os.MkdirAll(path.Dir(util.StaticFile(file)), 0755)
+	os.MkdirAll(path.Dir(util.Static(file)), 0755)
 	util.WriteFile(file, ab)
 }

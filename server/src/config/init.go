@@ -20,6 +20,7 @@ func init() {
 		`ORCA_ES_ADDR`:   &ESAddr,
 		`ORCA_ES_USER`:   &ESUser,
 		`ORCA_ES_PASS`:   &ESPass,
+		`ORCA_VA_TOKEN`:  &VAToken,
 	}
 	for k, v := range list {
 		s := os.Getenv(k)

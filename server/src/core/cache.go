@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"project/pb"
 	"project/util"
 )
@@ -19,4 +20,9 @@ func tryCache(p *pb.Req) ([]byte, bool) {
 
 func rspCacheFile(r *pb.Req) string {
 	return util.CacheName(r.Hash()) + `-rsp.json`
+}
+
+func cacheFile(hash [16]byte) string {
+	s := fmt.Sprintf(`cache/%02x/%02x/%02x/%x`, hash[0], hash[1], hash[2], hash[3:])
+	return s
 }

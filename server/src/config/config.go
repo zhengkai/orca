@@ -17,4 +17,6 @@ var (
 	ESAddr = ``
 	ESUser = ``
 	ESPass = ``
+
+	VAToken = ``
 )

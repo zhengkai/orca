@@ -4,9 +4,21 @@ package pb;
 
 message VaChatReq {
 	string system = 1;
-	repeated string user = 2;
+	string user = 2;
 	bool noCache = 3;
 	VaParam param = 4;
+	bool debug = 5;
+}
+message VaChatRsp {
+	string content = 1;
+	bool blocked = 2;
+}
+
+message VaChatWebRsp {
+	bool ok = 1;
+	VaChatRsp data = 2;
+	VaDebug debug = 3;
+	string error = 4;
 }
 
 message VaParam {
@@ -14,4 +26,20 @@ message VaParam {
 	uint32 maxOutputTokens = 2;
 	float topP = 3;
 	uint32 topK = 4;
+}
+
+message VaDebug {
+	uint32 costMs = 1;
+	string cahceFile = 2;
+	uint32 inputChar = 3;
+	uint32 inputToken = 4;
+	uint32 outputChar = 5;
+	uint32 outputToken = 6;
+	repeated VaSafety safety = 7;
+	uint32 totalMs = 8;
+}
+
+message VaSafety {
+	string category = 1;
+	float score = 2;
 }

@@ -19,8 +19,12 @@ type DownloadFunc func(url string) (ab []byte, err error)
 // CacheName ...
 func CacheName(hash [16]byte) string {
 	s := fmt.Sprintf(`cache/%02x/%02x/%02x/%x`, hash[0], hash[1], hash[2], hash[3:])
-	os.MkdirAll(StaticFile(filepath.Dir(s)), 0755)
 	return s
+}
+
+// Mkdir ...
+func Mkdir(filename string) {
+	os.MkdirAll(Static(filepath.Dir(filename)), 0755)
 }
 
 // FileExists ...
@@ -36,12 +40,12 @@ func IsURL(s string) bool {
 
 // ReadFile ...
 func ReadFile(file string) (ab []byte, err error) {
-	ab, err = os.ReadFile(StaticFile(file))
+	ab, err = os.ReadFile(Static(file))
 	return
 }
 
-// StaticFile ...
-func StaticFile(file string) string {
+// Static ...
+func Static(file string) string {
 	file = strings.TrimPrefix(file, config.StaticDir+`/`)
 	return fmt.Sprintf(`%s/%s`, config.StaticDir, file)
 }
@@ -67,8 +71,6 @@ func SaveData(name string, p proto.Message) (err error) {
 // WriteFile ...
 func WriteFile(file string, ab []byte) (err error) {
 
-	file = StaticFile(file)
-
 	defer zj.Watch(&err)
 
 	f, err := os.CreateTemp(config.StaticDir+`/tmp`, `wr-*`)
@@ -86,10 +88,19 @@ func WriteFile(file string, ab []byte) (err error) {
 		return
 	}
 
-	err = os.Rename(tmpName, file)
+	err = os.Rename(tmpName, Static(file))
 	if err != nil {
 		return
 	}
 
 	return
+}
+
+// WriteJSON ...
+func WriteJSON(file string, d any) error {
+	ab, err := json.Marshal(d)
+	if err != nil {
+		return err
+	}
+	return WriteFile(file, ab)
 }

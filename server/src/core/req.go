@@ -32,6 +32,7 @@ func (c *Core) getAB(p *pb.Req, r *http.Request) (ab []byte, cached bool, pr *ro
 		go func() {
 			reqFile := util.CacheName(p.Hash()) + `-req.json`
 			if !util.FileExists(reqFile) {
+				util.Mkdir(reqFile)
 				util.WriteFile(reqFile, p.Body)
 			}
 		}()
