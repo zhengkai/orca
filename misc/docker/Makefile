@@ -8,6 +8,9 @@ include ../../server/build/env.sh
 build: git
 	sudo docker build -t orca -f Dockerfile ../..
 
+debug-build: git
+	sudo docker build --progress=plain -t orca -f Dockerfile ../..
+
 run: build
 	sudo docker run \
 		--env OPENAI_API_KEY=$(OPENAI_API_KEY) \

@@ -9,7 +9,9 @@ RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.31.0
 
 COPY . /project
 
-RUN /project/server/build/build-server.sh prod
+RUN --mount=type=cache,target=/go/pkg/mod \
+	--mount=type=cache,target=/root/.cache/go-build \
+	/project/server/build/build-server.sh prod
 
 # clean stage
 
