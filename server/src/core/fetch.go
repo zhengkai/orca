@@ -37,7 +37,10 @@ func (pr *row) fetchRemote() (ab []byte, err error) {
 	client := &http.Client{
 		// Timeout: 30 * time.Second,
 	}
+	t := time.Now()
 	rsp, err := client.Do(req)
+	costMs := uint32(time.Since(t) / time.Millisecond)
+	metrics.OpenAITime(costMs)
 	if err != nil {
 		fmt.Fprintf(b, "client.Do fail: %s\n", err.Error())
 		return

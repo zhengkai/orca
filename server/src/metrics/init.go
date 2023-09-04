@@ -21,4 +21,7 @@ func init() {
 
 	prometheus.MustRegister(limitReq)
 	prometheus.MustRegister(limitToken)
+
+	prometheus.MustRegister(openaiTime)
+	prometheus.MustRegister(vaTime)
 }

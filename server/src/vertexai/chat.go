@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"project/metrics"
 	"project/pb"
 	"project/util"
 	"time"
@@ -168,6 +169,7 @@ func loadChat(k chatKey) (*ChatRsp, error) {
 		Raw:    rsp,
 		CostMs: uint32(time.Since(t) / time.Millisecond),
 	}
+	metrics.VaTime(r.CostMs)
 
 	answer := &pb.VaChatRsp{}
 	answer.Content, err = getChatVal(rsp)
