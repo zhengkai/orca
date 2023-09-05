@@ -1,7 +1,7 @@
 package metrics
 
 var (
-	openaiTime = newSummary(`orca_openai_time`, `openai api time`)
+	openaiTime = newSummary(`openai_time`, `openai api time`)
 )
 
 // OpenAITime ...

@@ -4,24 +4,18 @@ import (
 	"net/http"
 	"project/zj"
 	"strconv"
-
-	"github.com/prometheus/client_golang/prometheus"
 )
 
 var (
-	limitReq = prometheus.NewGaugeVec(
-		prometheus.GaugeOpts{
-			Name: `orca_limit_req_by_model`,
-			Help: `limit request by model`,
-		},
-		[]string{`model`},
+	limitReq = newGaugeVec(
+		`limit_req_by_model`,
+		`limit request by model`,
+		`model`,
 	)
-	limitToken = prometheus.NewGaugeVec(
-		prometheus.GaugeOpts{
-			Name: `orca_limit_token_by_model`,
-			Help: `limit token by model`,
-		},
-		[]string{`model`},
+	limitToken = newGaugeVec(
+		`limit_token_by_model`,
+		`limit token by model`,
+		`model`,
 	)
 )
 

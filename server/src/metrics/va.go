@@ -1,7 +1,7 @@
 package metrics
 
 var (
-	vaTime = newSummary(`orca_va_time`, `vertexai api time`)
+	vaTime = newSummary(`va_time`, `vertexai api time`)
 )
 
 // VaTime ...

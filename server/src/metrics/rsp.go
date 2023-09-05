@@ -1,35 +1,25 @@
 package metrics
 
-import (
-	"github.com/prometheus/client_golang/prometheus"
-)
-
 var (
-	rspBytes            = newCounter(`orca_rsp_bytes`, `rsp bytes`)
-	rspPromptTokenCount = newCounter(`orca_rsp_prompt_token`, `prompt token`)
-	rspTokenCount       = newCounter(`orca_rsp_token`, `token`)
-	rspTokenCachedCount = newCounter(`orca_rsp_token_cached`, `token cached`)
-	rspJSONFailCount    = newCounter(`orca_rsp_json_fail`, `json fail`)
-	rspTokenByModel     = prometheus.NewCounterVec(
-		prometheus.CounterOpts{
-			Name: `orca_token_by_model`,
-			Help: `token by model`,
-		},
-		[]string{`model`},
+	rspBytes            = newCounter(`rsp_bytes`, `rsp bytes`)
+	rspPromptTokenCount = newCounter(`rsp_prompt_token`, `prompt token`)
+	rspTokenCount       = newCounter(`rsp_token`, `token`)
+	rspTokenCachedCount = newCounter(`rsp_token_cached`, `token cached`)
+	rspJSONFailCount    = newCounter(`rsp_json_fail`, `json fail`)
+	rspTokenByModel     = newCounterVec(
+		`token_by_model`,
+		`token by model`,
+		`model`,
 	)
-	rspTokenByKey = prometheus.NewCounterVec(
-		prometheus.CounterOpts{
-			Name: `orca_token_by_key`,
-			Help: `openai key`,
-		},
-		[]string{`key`},
+	rspTokenByKey = newCounterVec(
+		`token_by_key`,
+		`openai key`,
+		`key`,
 	)
-	rspTokenByIP = prometheus.NewCounterVec(
-		prometheus.CounterOpts{
-			Name: `orca_token_by_ip`,
-			Help: `token by ip`,
-		},
-		[]string{`ip`},
+	rspTokenByIP = newCounterVec(
+		`token_by_ip`,
+		`token by ip`,
+		`ip`,
 	)
 )
 
