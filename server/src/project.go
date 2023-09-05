@@ -8,6 +8,9 @@ import (
 	"project/zj"
 
 	"github.com/zhengkai/life-go"
+
+	// for docker
+	_ "go.uber.org/automaxprocs"
 )
 
 // Start ...

@@ -10,6 +10,7 @@ require (
 	github.com/zhengkai/life-go v1.0.3
 	github.com/zhengkai/zog v1.0.3
 	github.com/zhengkai/zu v1.1.1
+	go.uber.org/automaxprocs v1.5.3
 	google.golang.org/api v0.138.0
 	google.golang.org/protobuf v1.31.0
 )
