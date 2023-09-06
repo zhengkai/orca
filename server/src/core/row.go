@@ -57,6 +57,7 @@ func (pr *row) wait() {
 
 func (pr *row) saveFile() {
 	rspFile := rspCacheFile(pr.req)
+	util.Mkdir(rspFile)
 	util.WriteFile(rspFile, pr.rsp)
 }
 

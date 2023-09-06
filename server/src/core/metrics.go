@@ -42,7 +42,10 @@ func doMetrics(ab []byte, cached bool, r *http.Request, req *pb.Req) {
 	key := strings.TrimPrefix(r.Header.Get(`Authorization`), `Bearer `)
 
 	metrics.RspToken(u.PromptTokens, u.TotalTokens, cached)
-	if !cached {
+	if cached {
+		metrics.RspTokenCachedByKey(key, u.TotalTokens)
+		metrics.RspTokenCachedByIP(sip, u.TotalTokens)
+	} else {
 		metrics.RspTokenByModel(o.Model, u.TotalTokens)
 		metrics.RspTokenByKey(key, u.TotalTokens)
 		metrics.RspTokenByIP(sip, u.TotalTokens)

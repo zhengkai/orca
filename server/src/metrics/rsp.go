@@ -1,5 +1,7 @@
 package metrics
 
+import "project/util"
+
 var (
 	rspBytes            = newCounter(`rsp_bytes`, `rsp bytes`)
 	rspPromptTokenCount = newCounter(`rsp_prompt_token`, `prompt token`)
@@ -13,12 +15,22 @@ var (
 	)
 	rspTokenByKey = newCounterVec(
 		`token_by_key`,
-		`openai key`,
+		`token by key`,
+		`key`,
+	)
+	rspTokenCachedByKey = newCounterVec(
+		`token_cached_by_key`,
+		`cached token by key`,
 		`key`,
 	)
 	rspTokenByIP = newCounterVec(
 		`token_by_ip`,
 		`token by ip`,
+		`ip`,
+	)
+	rspTokenCachedByIP = newCounterVec(
+		`token_cached_by_ip`,
+		`cached token by ip`,
 		`ip`,
 	)
 )
@@ -48,14 +60,19 @@ func RspTokenByIP(ip string, token uint32) {
 	rspTokenByIP.WithLabelValues(ip).Add(float64(token))
 }
 
+// RspTokenCachedByIP ...
+func RspTokenCachedByIP(ip string, token uint32) {
+	rspTokenCachedByIP.WithLabelValues(ip).Add(float64(token))
+}
+
 // RspTokenByKey ...
 func RspTokenByKey(key string, token uint32) {
-	if len(key) > 30 {
-		key = key[:30]
-	} else if key == `` {
-		key = `<empty>`
-	}
-	rspTokenByKey.WithLabelValues(key).Add(float64(token))
+	rspTokenByKey.WithLabelValues(util.FormatKey(key)).Add(float64(token))
+}
+
+// RspTokenCachedByKey ...
+func RspTokenCachedByKey(key string, token uint32) {
+	rspTokenCachedByKey.WithLabelValues(util.FormatKey(key)).Add(float64(token))
 }
 
 // RspTokenByModel ...

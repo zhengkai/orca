@@ -15,9 +15,11 @@ func init() {
 	prometheus.MustRegister(rspTokenCount)
 	prometheus.MustRegister(rspTokenCachedCount)
 	prometheus.MustRegister(rspJSONFailCount)
-	prometheus.MustRegister(rspTokenByIP)
 	prometheus.MustRegister(rspTokenByModel)
+	prometheus.MustRegister(rspTokenByIP)
+	prometheus.MustRegister(rspTokenCachedByIP)
 	prometheus.MustRegister(rspTokenByKey)
+	prometheus.MustRegister(rspTokenCachedByKey)
 
 	prometheus.MustRegister(limitReq)
 	prometheus.MustRegister(limitToken)
