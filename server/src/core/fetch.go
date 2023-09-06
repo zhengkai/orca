@@ -35,7 +35,7 @@ func (pr *row) fetchRemote() (ab []byte, err error) {
 	req.Header.Set(`Authorization`, `Bearer `+config.OpenAIKey)
 
 	client := &http.Client{
-		// Timeout: 30 * time.Second,
+		Timeout: 20 * time.Second,
 	}
 	t := time.Now()
 	rsp, err := client.Do(req)
