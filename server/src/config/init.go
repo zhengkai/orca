@@ -14,7 +14,7 @@ func init() {
 
 	list := map[string]*string{
 		`OPENAI_API_KEY`: &OpenAIKey,
-		`STATIC_DIR`:     &StaticDir,
+		`ORCA_DIR`:       &StaticDir,
 		`ORCA_WEB`:       &WebAddr,
 		`ORCA_LOG`:       &LogDir,
 		`ORCA_ES_ADDR`:   &ESAddr,

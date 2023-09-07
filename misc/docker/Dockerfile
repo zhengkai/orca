@@ -27,6 +27,6 @@ ENV TZ="Asia/Shanghai"
 
 ENV ORCA_WEB=":80"
 ENV ORCA_LOG="/log"
-ENV STATIC_DIR="/tmp"
+ENV ORCA_DIR="/tmp"
 
 CMD ["/orca-server"]
