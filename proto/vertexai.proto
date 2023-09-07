@@ -9,14 +9,22 @@ message VaChatReq {
 	VaParam param = 4;
 	bool debug = 5;
 }
-message VaChatRsp {
+
+message VaTextReq {
+	string prompt = 1;
+	bool noCache = 3;
+	VaParam param = 4;
+	bool debug = 5;
+}
+
+message VaRsp {
 	string content = 1;
 	bool blocked = 2;
 }
 
-message VaChatWebRsp {
+message VaWebRsp {
 	bool ok = 1;
-	VaChatRsp data = 2;
+	VaRsp data = 2;
 	VaDebug debug = 3;
 	string error = 4;
 }

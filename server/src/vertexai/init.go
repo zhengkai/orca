@@ -12,7 +12,7 @@ import (
 func init() {
 
 	var err error
-	chatClient, err = aiplatform.NewPredictionClient(
+	theClient, err = aiplatform.NewPredictionClient(
 		life.CTX,
 		option.WithEndpoint(`us-central1-aiplatform.googleapis.com:443`),
 		option.WithCredentialsFile(util.Static(`aigc-llm-730bb179e13c.json`)),

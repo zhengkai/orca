@@ -10,13 +10,21 @@ import (
 	"time"
 )
 
-// ChatHandle ...
-func ChatHandle(w http.ResponseWriter, r *http.Request) {
+// web type
+const (
+	WebText Web = iota + 1
+	WebChat
+)
+
+// Web ...
+type Web int
+
+func (web Web) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	t := time.Now()
 
-	data, debug, err := chatHandle(w, r)
-	o := &pb.VaChatWebRsp{
+	data, debug, err := handle(web, w, r)
+	o := &pb.VaWebRsp{
 		Data:  data,
 		Debug: debug,
 	}
@@ -36,7 +44,7 @@ func ChatHandle(w http.ResponseWriter, r *http.Request) {
 	w.Write(ab)
 }
 
-func chatHandleInput(w http.ResponseWriter, r *http.Request) (*pb.VaChatReq, error) {
+func chatHandleInput(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 
 	if r.Method != `POST` {
 		w.WriteHeader(http.StatusBadRequest)
@@ -59,39 +67,66 @@ func chatHandleInput(w http.ResponseWriter, r *http.Request) (*pb.VaChatReq, err
 		return nil, errors.New(`token not match`)
 	}
 
-	o := &pb.VaChatReq{}
-
 	ab, err := io.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return nil, errors.New(`read body fail`)
 	}
-	err = json.Unmarshal(ab, o)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return nil, err
-	}
 
-	return o, nil
+	return ab, nil
 }
 
-func chatHandle(w http.ResponseWriter, r *http.Request) (*pb.VaChatRsp, *pb.VaDebug, error) {
+func handle(web Web, w http.ResponseWriter, r *http.Request) (*pb.VaRsp, *pb.VaDebug, error) {
 
-	req, err := chatHandleInput(w, r)
+	ab, err := chatHandleInput(w, r)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	rsp, err := Chat(req)
+	var rsp *Rsp
+	isDebug := false
+
+	if web == WebChat {
+
+		req := &pb.VaChatReq{}
+		isDebug, err = unmarshalWebReq(w, ab, req)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		rsp, err = Chat(req)
+
+	} else {
+
+		req := &pb.VaTextReq{}
+		isDebug, err = unmarshalWebReq(w, ab, req)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		rsp, err = Text(req)
+	}
+
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return nil, nil, err
 	}
 
 	var debug *pb.VaDebug
-	if req.Debug {
+	if isDebug {
 		debug = rsp.Debug()
 	}
 
 	return rsp.Answer, debug, nil
+}
+
+func unmarshalWebReq(w http.ResponseWriter, ab []byte, req canDebug) (bool, error) {
+
+	err := json.Unmarshal(ab, req)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return false, err
+	}
+
+	return req.GetDebug(), nil
 }

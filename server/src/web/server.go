@@ -20,7 +20,8 @@ func Server() {
 	mux.Handle(`/v1/moderations`, core.NewCore())
 	mux.Handle(`/v1/completions`, core.NewCore())
 	mux.Handle(`/v1/chat/completions`, core.NewCore())
-	mux.HandleFunc(`/va/chat`, vertexai.ChatHandle)
+	mux.Handle(`/va/chat`, vertexai.WebChat)
+	mux.Handle(`/va/text`, vertexai.WebText)
 
 	s := &http.Server{
 		Addr:         config.WebAddr,
