@@ -2,7 +2,6 @@ package metrics
 
 import (
 	"net/http"
-	"project/zj"
 	"strconv"
 )
 
@@ -34,8 +33,7 @@ func Limit(h http.Header) {
 	if h.Get(`x-ratelimit-limit-tokens`) != `` {
 		token := h.Get(`x-ratelimit-remaining-tokens`)
 		limitToken.WithLabelValues(model).Set(strToFloat(token))
-
-		zj.J(`limit time`, model, h.Get(`x-ratelimit-reset-requests`), h.Get(`x-ratelimit-reset-tokens`))
+		// zj.J(`limit time`, model, h.Get(`x-ratelimit-reset-requests`), h.Get(`x-ratelimit-reset-tokens`))
 	}
 }
 
